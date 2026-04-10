@@ -1,7 +1,3 @@
-"""
-Все формы интерфейса
-Молочный комбинат 'Полесье'
-"""
 from PyQt5.QtWidgets import (
     QDialog, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QMessageBox, QTableWidget,
@@ -715,15 +711,12 @@ class UserEditDialog(QDialog):
             self.password_input.setEchoMode(QLineEdit.Password)
             self.password_input.setPlaceholderText("Минимум 6 символов")
             layout.addRow("Пароль:", self.password_input)
-
-        # Выпадающий список ролей из БД
         self.role_combo = QComboBox()
-        roles = get_all_roles()  # Получаем роли из БД
+        roles = get_all_roles()
         for role_id, role_name_db in roles:
             self.role_combo.addItem(role_name_db)
             self.role_map[role_name_db] = role_id
 
-        # Выбираем текущую роль при редактировании
         if role_name:
             index = self.role_combo.findText(role_name)
             if index >= 0:
@@ -758,7 +751,6 @@ class UserEditDialog(QDialog):
         if hasattr(self, 'password_input'):
             password = self.password_input.text()
 
-        # Получаем ID выбранной роли
         selected_role_name = self.role_combo.currentText()
         role_id = self.role_map.get(selected_role_name)
 
@@ -877,7 +869,6 @@ class MainForm(QMainWindow):
         main_layout.setSpacing(20)
         main_layout.setContentsMargins(30, 30, 30, 30)
 
-        # ✅ ИСПРАВЛЕНО: создание header_layout и logo_label
         header_layout = QHBoxLayout()
         logo_label = QLabel("🏭")
         logo_label.setStyleSheet("font-size: 48px;")
@@ -1019,26 +1010,21 @@ class MainForm(QMainWindow):
         )
 
     def _create_menu(self):
-        """Создать главное меню приложения"""
         menubar = self.menuBar()
 
         file_menu = menubar.addMenu("📁 Файл")
 
-        # ✅ Кнопка выхода из учётной записи
-        exit_action = QAction("🚪 Выход из учётной записи", self)
+        exit_action = QAction("Выход из учётной записи", self)
         exit_action.triggered.connect(self._on_exit_requested)
         file_menu.addAction(exit_action)
 
-        # Разделитель
         file_menu.addSeparator()
 
-        # Кнопка закрытия приложения
-        quit_action = QAction("❌ Закрыть приложение", self)
+        quit_action = QAction("Закрыть приложение", self)
         quit_action.triggered.connect(self.close)
         file_menu.addAction(quit_action)
 
     def _on_exit_requested(self):
-        """Обработка выхода из учётной записи"""
         reply = QMessageBox.question(
             self,
             "Выход из системы",
@@ -1049,7 +1035,7 @@ class MainForm(QMainWindow):
         )
 
         if reply == QMessageBox.Yes:
-            self.exit_requested.emit()  # ✅ Отправляем сигнал в main.py
+            self.exit_requested.emit()
 
     def _create_customers_widget(self):
         widget = QWidget()
@@ -1233,7 +1219,6 @@ class MainForm(QMainWindow):
                 return
 
     def _show_about(self):
-        """Показать информацию о программе"""
         QMessageBox.about(
             self, "О программе",
             "Молочный комбинат 'Полесье'\n\n"

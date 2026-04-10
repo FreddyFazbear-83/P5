@@ -1,7 +1,3 @@
-"""
-Молочный комбинат 'Полесье' - Система управления
-Главный файл приложения
-"""
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
@@ -10,7 +6,6 @@ from forms import LoginForm, MainForm
 
 
 class Application:
-    """Класс управления приложением"""
 
     def __init__(self):
         self.app = QApplication(sys.argv)
@@ -79,7 +74,6 @@ class Application:
         """
 
     def show_login(self):
-        """Показать форму входа"""
         login_form = LoginForm()
         if login_form.exec_() != LoginForm.Accepted:
             sys.exit(0)
@@ -91,22 +85,19 @@ class Application:
         self.show_main(user)
 
     def show_main(self, user):
-        """Показать главное окно"""
         self.current_window = MainForm(user)
         self.current_window.exit_requested.connect(self.on_exit_requested)
         self.current_window.show()
 
     def on_exit_requested(self):
-        """Обработка выхода из учётной записи"""
         if self.current_window:
             self.current_window.close()
             self.current_window = None
         self.show_login()
 
     def run(self):
-        """Запуск приложения"""
         if not init_database():
-            print("❌ Ошибка подключения к базе данных!")
+            print("Ошибка подключения к базе данных!")
             sys.exit(1)
 
         self.show_login()
